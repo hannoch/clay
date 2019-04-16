@@ -1,0 +1,72 @@
+[{
+  "id": "1",
+  "NS": "search.xmut.edu.cn",
+  "IP": "58.199.200.12",
+  "Title": "None",
+  "Server": "None",
+  "Address": "China Xiamen",
+  "GPS": "24.47/118.0"
+
+},{
+    "id": "2",
+    "NS": "cs.xmut.edu.cn",
+    "IP": "58.199.200.21",
+    "Title": "计算机与信息工程学院",
+    "Server": "Microsoft-IIS/7.5ASP.NET",
+    "Address": "China Xiamen",
+    "GPS": "24.47/118.0"
+
+  },{
+  "id": "3",
+  "NS": "my.xmut.edu.cn",
+  "IP": "210.34.213.131",
+  "Title": "None",
+  "Server": "None",
+  "Address": "China Beijing",
+  "GPS": "39.92/116.3"
+
+},{
+  "id": "4",
+  "NS": "www.xmut.edu.cn",
+  "IP": "58.199.200.11",
+  "Title": "厦门理工学院",
+  "Server": "Microsoft-IIS/7.5ASP.NET",
+  "Address": "China Xiamen",
+  "GPS": "24.47/118.0"
+
+}, {
+  "id": "5",
+  "NS": "mail.xmut.edu.cn",
+  "IP": "210.34.213.13",
+  "Title": "厦门理工学院电子邮件系统",
+  "Server": "nginx/1.10.2",
+  "Address": "China Beijing",
+  "GPS": "39.92/116.3"
+
+}, {
+  "id": "6",
+  "NS": "i.xmut.edu.cn",
+  "IP": "210.34.213.244",
+  "Title": "None",
+  "Server": "None",
+  "Address": "China Beijing",
+  "GPS": "39.92/116.3"
+}, {
+  "id": "7",
+  "NS": "ids.xmut.edu.cn",
+  "IP": "210.34.213.112",
+  "Title": "None",
+  "Server": "None",
+  "Address": "China Beijing",
+  "GPS": "39.92/116.3"
+
+}, {
+  "id": "8",
+  "NS": "cis.xmut.edu.cn",
+  "IP": "58.199.200.21",
+  "Title": "厦门理工学院国际教育学院",
+  "Server": "Microsoft-IIS/7.5ASP.NET",
+  "Address": "China Xiamen",
+  "GPS": "24.47/118.0"
+}
+]
