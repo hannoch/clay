@@ -6,6 +6,7 @@ from worker.dnsmaper.dnsmaper import *
 
 @shared_task(track_started=True)
 def dnsmaper(url):
+    
     dns_zone_transfer_check(url)
     hosts = "./db/subs.db".split("\n")
     print('\n[!]Check DNS Resolvers..')
