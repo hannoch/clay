@@ -1,84 +1,88 @@
 [{
-	"title" : "后台首页",
+	"title" : "首页",
 	"icon" : "icon-computer",
 	"href" : "page/main.html",
+	"spread" : true
+},{
+	"title" : "信息收集",
+	"icon" : "icon-text",
+	"href" : "",
 	"spread" : true,
 	"children" : [
 		{
-			"title" : "404页面",
-			"icon" : "&#xe61c;",
-			"href" : "page/404.html",
+			"title" : "基础信息",
+			"icon" : "&#xe62a;",
+			"href" : "page/collectMessage/baseInfo.html",
+			"spread" : false
+
+		},
+		{
+			"title" : "子域名收集",
+			"icon" : "&#xe609;",
+			"href" : "/collectMessage/domain",
 			"spread" : false
 		},
 		{
-			"title" : "登录",
+			"title" : "GoogleHack",
 			"icon" : "&#xe609;",
-			"href" : "page/login/login.html",
-			"spread" : false,
-			"target" : "_blank"
+			"href" : "/collectMessage/googlehack",
+			"spread" : false
 		}
 	]
 },{
-	"title" : "文章列表",
+	"title" : "漏洞扫描",
 	"icon" : "icon-text",
-	"href" : "page/news/newsList.html",
+	"href" : "",
 	"spread" : true,
 	"children" : [
-		{
-			"title" : "404页面",
-			"icon" : "&#xe61c;",
-			"href" : "page/404.html",
+		{"title" : "端口扫描",
+			"icon" : "&#xe609;",
+			"href" : "page/vulnerabilityScan/portScan.html",
 			"spread" : false
 		},
 		{
-			"title" : "登录",
+			"title" : "Struts2扫描",
 			"icon" : "&#xe609;",
-			"href" : "page/login/login.html",
-			"spread" : false,
-			"target" : "_blank"
+			"href" : "page/vulnerabilityScan/struts.html",
+			"spread" : false
+		},
+		{"title" : "目录扫描",
+			"icon" : "&#xe609;",
+			"href" : "page/vulnerabilityScan/dirScan.html",
+			"spread" : false
 		}
 	]
+},{
+	"title" : "网站列表",
+	"icon" : "icon-text",
+	"href" : "page/news/newsList.html",
+	"spread" : true
 },{
 	"title" : "友情链接",
 	"icon" : "&#xe64c;",
 	"href" : "page/links/linksList.html",
-	"spread" : true,
-	"children" : [
-		{
-			"title" : "404页面",
-			"icon" : "&#xe61c;",
-			"href" : "page/404.html",
-			"spread" : false
-		},
-		{
-			"title" : "登录",
-			"icon" : "&#xe609;",
-			"href" : "page/login/login.html",
-			"spread" : false,
-			"target" : "_blank"
-		}
-	]
+	"spread" : true
 },{
 	"title" : "系统基本参数",
 	"icon" : "&#xe631;",
 	"href" : "page/systemParameter/systemParameter.html",
 	"spread" : false
 },{
-	"title" : "其他页面",
+	"title" : "其他",
 	"icon" : "&#xe630;",
 	"href" : "",
 	"spread" : true,
 	"children" : [
 		{
-			"title" : "404页面",
+			"title" : "Celery监控",
 			"icon" : "&#xe61c;",
-			"href" : "page/404.html",
+			"href" : "http://127.0.0.1:5555",
 			"spread" : false
 		},
 		{
 			"title" : "登录",
 			"icon" : "&#xe609;",
-			"href" : "page/login/login.html",
+			"href" : "http://127.0.0.1:8000/admin",
 			"spread" : false,
 			"target" : "_blank"
 		}

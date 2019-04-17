@@ -1,17 +1,30 @@
+# encoding: utf-8
+
+from django.db.models import Q
+from django.http import HttpResponse,JsonResponse
+from django.shortcuts import render
+from django.core import serializers
+import time
 import paramiko
 import json
-from django.http import HttpResponse
-from django.shortcuts import render
-import time
 
-from .ssh import Linux
 from .tasks import *
+from collectMessage.models import Domain
 
 
-
-#得到数据
 def response_data(request):
 	if request.method == 'GET':
+		#all_domain = Domain.objects.all()
+		# 使用ORM
+		# all()返回的是QuerySet 数据类型；values()返回的是ValuesQuerySet 数据类型
+		all_domain = Domain.objects.values('id', 'IP', 'NS', 'Title','Server','Address','GPS','create_time')
+		return JsonResponse(list(all_domain), safe=False)
+		
+
+#得到数据
+def response_data2(request):
+	if request.method == 'GET':
+		
 		data = [{
 	  "id": "1",
 	  "NS": "search.xmut.edu.cn",
@@ -21,127 +34,6 @@ def response_data(request):
 	  "Address": "China Xiamen",
 	  "GPS": "24.47/118.0"
 	
-	},{
-	    "id": "2",
-	    "NS": "cs.xmut.edu.cn",
-	    "IP": "58.199.200.21",
-	    "Title": "计算机与信息工程学院",
-	    "Server": "Microsoft-IIS/7.5ASP.NET",
-	    "Address": "China Xiamen",
-	    "GPS": "24.47/118.0"
-	
-	  },{
-	  "id": "3",
-	  "NS": "my.xmut.edu.cn",
-	  "IP": "210.34.213.131",
-	  "Title": "None",
-	  "Server": "None",
-	  "Address": "China Beijing",
-	  "GPS": "39.92/116.3"
-	
-	},{
-	  "id": "4",
-	  "NS": "www.xmut.edu.cn",
-	  "IP": "58.199.200.11",
-	  "Title": "厦门理工学院",
-	  "Server": "Microsoft-IIS/7.5ASP.NET",
-	  "Address": "China Xiamen",
-	  "GPS": "24.47/118.0"},{
-	  "id": "5",
-	  "NS": "mail.xmut.edu.cn",
-	  "IP": "210.34.213.13",
-	  "Title": "厦门理工学院电子邮件系统",
-	  "Server": "nginx/1.10.2",
-	  "Address": "China Beijing",
-	  "GPS": "39.92/116.3"
-	},{
-	  "id": "6",
-	  "NS": "i.xmut.edu.cn",
-	  "IP": "210.34.213.244",
-	  "Title": "None",
-	  "Server": "None",
-	  "Address": "China Beijing",
-	  "GPS": "39.92/116.3"
-	}, {
-	  "id": "7",
-	  "NS": "ids.xmut.edu.cn",
-	  "IP": "210.34.213.112",
-	  "Title": "None",
-	  "Server": "None",
-	  "Address": "China Beijing",
-	  "GPS": "39.92/116.3"
-	},{
-	  "id": "8",
-	  "NS": "cis.xmut.edu.cn",
-	  "IP": "58.199.200.21",
-	  "Title": "厦门理工学院国际教育学院",
-	  "Server": "Microsoft-IIS/7.5ASP.NET",
-	  "Address": "China Xiamen",
-	  "GPS": "24.47/118.0"
-	},{
-	  "id": "6",
-	  "NS": "i.xmut.edu.cn",
-	  "IP": "210.34.213.244",
-	  "Title": "None",
-	  "Server": "None",
-	  "Address": "China Beijing",
-	  "GPS": "39.92/116.3"
-	}, {
-	  "id": "7",
-	  "NS": "ids.xmut.edu.cn",
-	  "IP": "210.34.213.112",
-	  "Title": "None",
-	  "Server": "None",
-	  "Address": "China Beijing",
-	  "GPS": "39.92/116.3"
-	},{
-	  "id": "8",
-	  "NS": "cis.xmut.edu.cn",
-	  "IP": "58.199.200.21",
-	  "Title": "厦门理工学院国际教育学院",
-	  "Server": "Microsoft-IIS/7.5ASP.NET",
-	  "Address": "China Xiamen",
-	  "GPS": "24.47/118.0"
-	},{
-	  "id": "6",
-	  "NS": "i.xmut.edu.cn",
-	  "IP": "210.34.213.244",
-	  "Title": "None",
-	  "Server": "None",
-	  "Address": "China Beijing",
-	  "GPS": "39.92/116.3"
-	}, {
-	  "id": "7",
-	  "NS": "ids.xmut.edu.cn",
-	  "IP": "210.34.213.112",
-	  "Title": "None",
-	  "Server": "None",
-	  "Address": "China Beijing",
-	  "GPS": "39.92/116.3"
-	},{
-	  "id": "8",
-	  "NS": "cis.xmut.edu.cn",
-	  "IP": "58.199.200.21",
-	  "Title": "厦门理工学院国际教育学院",
-	  "Server": "Microsoft-IIS/7.5ASP.NET",
-	  "Address": "China Xiamen",
-	  "GPS": "24.47/118.0"
-	},{
-	  "id": "6",
-	  "NS": "i.xmut.edu.cn",
-	  "IP": "210.34.213.244",
-	  "Title": "None",
-	  "Server": "None",
-	  "Address": "China Beijing",
-	  "GPS": "39.92/116.3"
-	}, {
-	  "id": "7",
-	  "NS": "ids.xmut.edu.cn",
-	  "IP": "210.34.213.112",
-	  "Title": "None",
-	  "Server": "None",
-	  "Address": "China Beijing",
-	  "GPS": "39.92/116.3"
 	},{
 	  "id": "8",
 	  "NS": "cis.xmut.edu.cn",
@@ -154,9 +46,13 @@ def response_data(request):
 		
 		return HttpResponse(json.dumps(data), content_type="application/json")
 
-# 1.2.前往domain 页
+# 前往domain 页
 def domain(request):
 	return render(request, 'collectMessage/domain.html')
+
+# 前往domain 页
+def googlehack(request):
+	return render(request, 'collectMessage/googleHack.html')
 
 """
 从domain.html input 中得到数据

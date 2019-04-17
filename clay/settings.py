@@ -27,7 +27,7 @@ SECRET_KEY = '+yc$bg3^(@asjo&b7f14x^@8=g3rs65zw8b@75gxsz59e4p_*o'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -41,13 +41,22 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'xadmin',
     'crispy_forms',
+    'index',
     'users',
     'student',
     'collectMessage',
+    'courses',
+    'operation',
+    'organization',
+     'captcha',
+    'pure_pagination',
+    'DjangoUeditor',
     'testcelery',
     'djcelery',
+    
 ]
-
+# 此处重载是为了使我们的UserProfile生效
+AUTH_USER_MODEL = "users.UserProfile"
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -60,11 +69,11 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'clay.urls'
 
+
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [os.path.join(BASE_DIR, 'templates')],
-        # 'DIRS': [os.path.join(BASE_DIR, 'apps/operation/templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -72,10 +81,14 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                "django.template.context_processors.i18n",
+                'django.template.context_processors.media',
+                'django.template.context_processors.request',
             ],
         },
     },
 ]
+
 
 WSGI_APPLICATION = 'clay.wsgi.application'
 
@@ -132,36 +145,45 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
-
-AUTH_USER_MODEL = 'users.User'
-AUTHENTICATION_BACKENDS = (
-    'django.contrib.auth.backends.ModelBackend',
-    'users.backends.EmailBackend',
-)
 
 LOGOUT_REDIRECT_URL = '/'
 LOGIN_REDIRECT_URL = '/'
 # Internationalization
 # https://docs.djangoproject.com/en/2.1/topics/i18n/
 
+# 语言改为中文
 LANGUAGE_CODE = 'zh-hans'
 
+# 时区改为上海
 TIME_ZONE = 'Asia/Shanghai'
-
 
 USE_I18N = True
 
 USE_L10N = True
 
-USE_TZ = True
-
+# 数据库存储使用时间，True时间会被存为UTC的时间
+USE_TZ = False
 
 # Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/2.1/howto/static-files/
+# https://docs.djangoproject.com/en/2.0/howto/static-files/
 
 STATIC_URL = '/static/'
-STATICFILES_DIRS = (
-    os.path.join(BASE_DIR, 'static'),
-   # os.path.join(BASE_DIR, 'apps/users/static'),
-)
+
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, "static"),
+]
+
+# 发送邮件的setting设置
+
+EMAIL_HOST = "smtp.qq.com"
+EMAIL_PORT = 25
+EMAIL_HOST_USER = "790152894@qq.com"
+EMAIL_HOST_PASSWORD = "2342234"
+EMAIL_USE_TLS = True
+EMAIL_FROM = "790152894@qq.com"
+
+# 设置我们上传文件的路径
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+# STATIC_ROOT = os.path.join(BASE_DIR, 'static')

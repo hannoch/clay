@@ -2,38 +2,57 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <title>基础信息</title>
+    <title>GoogleHack</title>
     <meta name="renderer" content="webkit">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="format-detection" content="telephone=no">
-    <link rel="stylesheet" href="../layui/css/layui.css" media="all" />
+    <link rel="stylesheet" href="/static/layui/css/layui.css" media="all" />
 </head>
 <body class="childrenBody">
-https://github.com/m4skm0b/googlehacker
-googlehacker
-此工具用作google hacking。
+<!--分割线-->
+<hr class="layui-bg-blue">
+<fieldset class="layui-elem-field" style="width: 50%;margin: auto;">
+        <legend>GoogleHack</legend>
+        <div class="layui-field-box">
+           <p>功能说明：</p>
+            <table style="width:100%" border="1">
+                <tr>
+                    <td>intitle:标题中搜索</td>
+                    <td>intext:正文中搜索</td>
+                    <td>inurl:网址中搜索</td>
+                    <td>inanchor:锚链链接搜索</td>
+                    <td>filetype:文档类型限定</td>
+                </tr>
+                 <tr>
+                    <td>cache:快照信息</td>
+                    <td>related:相关网址</td>
+                    <td>link:所有链接</td>
+                    <td>site:限制在某网站</td>
+                    <td>info:信息页面</td>
+                </tr>
+            </table>
 
-Options:
+        </div>
+    </fieldset>
+    <p>  </p>
+    <p>&nbsp;</p>
+<!--分割线-->
+<hr class="layui-bg-blue">
+<div class="layui-container" style="width: 50%;margin: auto">
 
--u 指定目标域名
-
--t 指定搜索类型
-
--t 1 搜索泄露的文件
-
--t 2 搜索除了文件其它可被利用的信息
-
--t 3 搜索所有规则匹配中的信息
-<h3>GoogleHack Generate</h3>
-<hr>
-<input type="text" name="title" required lay-verify="required" placeholder="URL" autocomplete="off" class="layui-input" id="input" style="width: 500px;"><br>
-<button class="layui-btn layui-btn-fluid" onclick="getPoC('googlehack');" style="width: 100px;">Generate</button><br><br><hr>
+<input type="text" id="googlehack-input" name="title" required lay-verify="required"  placeholder="site:" autocomplete="off" class="layui-input" >
+    <br>
+<button class="layui-btn layui-btn-fluid" style="width: 100px;" onclick="googleHack()">生成语法</button>
+    <br><br><hr>
 <p id="pocText">Result</p>
+    <div id="resulte-div"></div>
+</div>
 </body>
 </html>
-<script type="text/javascript" src="../../layui/layui.js"></script>
-<script src="../../js/jquery-2.1.4.min.js"></script>
+<script type="text/javascript" src="/static/layui/layui.js"></script>
+<script src="/static/js/jquery-2.1.4.min.js"></script>
+<script src="/static/js/googlehack.js"></script>
 
