@@ -2,25 +2,81 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <title>基础信息</title>
+    <title>信息收集</title>
     <meta name="renderer" content="webkit">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="format-detection" content="telephone=no">
-    <link rel="stylesheet" href="../layui/css/layui.css" media="all" />
+    <link rel="stylesheet" href="/static/layui/css/layui.css" media="all" />
+    <link rel="stylesheet" href="//at.alicdn.com/t/font_tnyc012u2rlwstt9.css" media="all" />
+    <link rel="stylesheet" href="/static/css/news.css" media="all" />
 </head>
 <body class="childrenBody">
+<!--分割线-->
+<hr class="layui-bg-blue">
+<div class="layui-container">
+    <fieldset class="layui-elem-field" style="width: 50%;margin: auto;">
+        <legend>信息收集</legend>
+        <div class="layui-field-box">
+           <b>功能说明：使用http://site.ip138.com/网站进行whois查询/注册人反查/邮箱反查/相关资产</b>
+        </div>
+    </fieldset>
+    <p>  </p>
+    <p>&nbsp;</p>
+    <div class="layui-row" style="width: 50%;margin: auto;">
+        <!--表单-->
 
-    w9scan
-    一款全能型的网站漏洞扫描器，借鉴了各位前辈的优秀代码。
-    内置1200+插件可对网站进行一次规模的检测，功能包括但不限于web指纹检测
-    、端口指纹检测、网站结构分析、
-    各种流行的漏洞检测、爬虫以及SQL注入检测、XSS检测等等，w9scan会自动生成精美HTML格式结果报告
+        <form class="layui-form" action="{% url 'collectMessage:baseinfo' %}" method="post" >
+            {% csrf_token %}
+            <div class="layui-form-item">
+                <label class="layui-form-label">URL</label>
+                <div class="layui-input-block">
+                    <input type="text" name="url" required  lay-verify="required" placeholder="请输入IP或者domain     eg:127.0.0.1 |  baidu.com" autocomplete="off" class="layui-input">
+                </div>
+            </div>
 
-
-<script type="text/javascript" src="../../layui/layui.js"></script>
-<script type="text/javascript" src="baseInfo.js"></script>
+            <div class="layui-form-item">
+                <div class="layui-input-block">
+                    <button class="layui-btn" lay-submit lay-filter="formsubmit">提交</button>
+                    <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<hr class="layui-bg-blue">
+<div class="layui-tab layui-tab-card" style="width: 50%;margin: auto;">
+  <ul class="layui-tab-title" >
+   <li class="layui-this" style="width: 20%">IP</li>
+    <li style="width: 20%">子域名</li>
+    <li style="width: 20%">备案</li>
+    <li style="width: 20%">whois</li>
+  </ul>
+  <div class="layui-tab-content" style="height:70%;">
+    <div class="layui-tab-item layui-show">
+         <pre class="layui-code">
+            {{ data.IPList }}
+      </pre>
+    </div>
+    <div class="layui-tab-item">
+        <pre class="layui-code">
+            {{ data.DomainInfo }}
+      </pre>
+    </div>
+    <div class="layui-tab-item">
+          <pre class="layui-code">
+            {{ data.BeianInfo }}
+      </pre></div>
+    <div class="layui-tab-item">
+         <pre class="layui-code">
+            {{ data.WhoisInfo }}
+      </pre>
+    </div>
+  </div>
+</div>
+<script type="text/javascript" src="/static/layui/layui.js"></script>
+<script src="/static/js/baseInfo.js"></script>
 </body>
 </html>

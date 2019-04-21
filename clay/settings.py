@@ -17,6 +17,7 @@ import sys
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, os.path.join(BASE_DIR, 'apps'))
 sys.path.insert(0, os.path.join(BASE_DIR, 'extra_apps'))
+sys.path.insert(0, os.path.join(BASE_DIR, 'worker'))
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.1/howto/deployment/checklist/
@@ -42,6 +43,7 @@ INSTALLED_APPS = [
     'xadmin',
     'crispy_forms',
     'index',
+    'vulnerabilityScan',
     'users',
     'student',
     'collectMessage',
@@ -120,8 +122,10 @@ DATABASES = {
 
 # Celery配置
 # Celery application definition
-CELERY_BROKER_URL = 'redis://192.168.52.130:6379/1'
-CELERY_RESULT_BACKEND = 'redis://192.168.52.130:6379/2'
+
+#BROKER_URL = 'redis://192.168.52.128:6379/0'
+BROKER_URL ='amqp://guest:guest@localhost:5672//'
+CELERY_RESULT_BACKEND = 'redis://192.168.52.128:6379/1'
 CELERY_ACCEPT_CONTENT = ['application/json']
 CELERY_RESULT_SERIALIZER = 'json'
 CELERY_TASK_SERIALIZER = 'json'
@@ -150,7 +154,8 @@ LOGOUT_REDIRECT_URL = '/'
 LOGIN_REDIRECT_URL = '/'
 # Internationalization
 # https://docs.djangoproject.com/en/2.1/topics/i18n/
-
+#url 后面不加/
+#APPEND_SLASH = False
 # 语言改为中文
 LANGUAGE_CODE = 'zh-hans'
 
@@ -162,7 +167,7 @@ USE_I18N = True
 USE_L10N = True
 
 # 数据库存储使用时间，True时间会被存为UTC的时间
-USE_TZ = False
+USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.0/howto/static-files/

@@ -6,20 +6,24 @@ from django.urls import reverse
 from pure_pagination import Paginator, EmptyPage, PageNotAnInteger
 from django.http import HttpResponseRedirect, HttpResponse
 from django.shortcuts import render
+from captcha.models import CaptchaStore
+from captcha.helpers import captcha_image_url
+from PIL import Image, ImageDraw, ImageFont
+import random
+from io import BytesIO
+
 # Django自带的用户验证,login
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.backends import ModelBackend
 
-from courses.models import Course
-from operation.models import UserCourse, UserFavorite, UserMessage
-from organization.models import CourseOrg, Teacher
+from operation.models import  UserMessage
 from .models import UserProfile, EmailVerifyRecord, Banner
 # 并集运算
 from django.db.models import Q
 # 基于类实现需要继承的view
 from django.views.generic.base import View
 # form表单验证 & 验证码
-from .forms import LoginForm, RegisterForm, ActiveForm, ForgetForm, ModifyPwdForm, UploadImageForm, UserInfoForm
+from .forms import LoginForm, RegisterForm, ActiveForm, ForgetForm, ModifyPwdForm, UploadImageForm, UserInfoForm,loginCaptchaForm
 # 进行密码加密
 from django.contrib.auth.hashers import make_password
 # 发送邮件
@@ -50,7 +54,9 @@ class ActiveUserView(View):
                 request, "register.html", {
                     "msg": "您的激活链接无效", "active_form": active_form})
 
-
+'''
+注册功能
+'''
 class RegisterView(View):
     """注册功能的view"""
     # get方法直接返回页面
@@ -103,7 +109,9 @@ class RegisterView(View):
                 request, "register.html", {
                     "register_form": register_form})
 
-
+'''
+实现用户名邮箱均可登录
+'''
 class CustomBackend(ModelBackend):
     """
     实现用户名邮箱均可登录
@@ -123,15 +131,19 @@ class CustomBackend(ModelBackend):
         except Exception as e:
             return None
 
-
+'''
+用户退出登录
+'''
 class LogoutView(View):
     def get(self, request):
         # django自带的logout
         logout(request)
         # 重定向到首页,
-        return HttpResponseRedirect(reverse("index"))
+        return HttpResponseRedirect(reverse("login"))
 
-
+'''
+用户登录界面
+'''
 class LoginView(View):
     # 直接调用get方法免去判断
     def get(self, request):
@@ -142,24 +154,29 @@ class LoginView(View):
         #     "redirect_url": redirect_url
         # })
         #redirect_url = request.GET.get('next', '')
-        return render(request, "login.html")
+        #图片验证码
+        #hashkey验证码生成的秘钥，image_url验证码的图片地址
+        login_form = LoginForm()
+        # Python内置了一个locals()函数，它返回当前所有的本地变量字典
+        return render(request, "users/login.html",{'login_form':login_form})
     
 
     def post(self, request):
+        
         # 类实例化需要一个字典参数dict:request.POST就是一个QueryDict所以直接传入
         # POST中的usernamepassword，会对应到form中
         login_form = LoginForm(request.POST)
-
-        # is_valid判断我们字段是否有错执行我们原有逻辑，验证失败跳回login页面
+       
         if login_form.is_valid():
             # 取不到时为空，username，password为前端页面name值
             user_name = request.POST.get("username", "")
             print("username:"+user_name)
             pass_word = request.POST.get("password", "")
             print("password:" + pass_word)
+            
+            
             # 成功返回user对象,失败返回null
             user = authenticate(username=user_name, password=pass_word)
-
             # 如果不是null说明验证成功
             if user is not None:
                 # 只有当用户激活时才给登录
@@ -177,50 +194,19 @@ class LoginView(View):
                     return HttpResponseRedirect(reverse("index:index"))
                 # 即用户未激活跳转登录，提示未激活
                 else:
-                    return render(request, "login.html", {"msg": "用户名未激活! 请前往邮箱进行激活"})
+                    return render(request, "users/login.html",{'login_form':login_form}, {"msg": "用户名未激活! 请前往邮箱进行激活"})
             # 仅当用户真的密码出错时
             else:
-                return render(request, "login.html", {"msg": "用户名或密码错误!"})
+                return render(request, "users/login.html",{'login_form':login_form,"msg": "用户名或密码错误!"})
         # 验证不成功跳回登录页面
         # 没有成功说明里面的值是None，并再次跳转回主页面
         else:
-            return render(request, "login.html", {"login_form": login_form})
-
-# Create your views here
+            return render(request, "users/login.html", {'login_form':login_form})
 
 
-# 当我们配置url被这个view处理时，自动传入request对象.
-# 这个是已经被我抛弃的方法型实现，改为类实现
-def user_login(request):
-    # 前端向后端发送的请求方式: get 或post
-
-    # 登录提交表单为post
-    if request.method == "POST":
-        # 取不到时为空，username，password为前端页面name值
-        user_name = request.POST.get("username", "")
-        pass_word = request.POST.get("password", "")
-
-        # 成功返回user对象,失败返回null
-        user = authenticate(username=user_name, password=pass_word)
-
-        # 如果不是null说明验证成功
-        if user is not None:
-            # login_in 两参数：request, user
-            # 实际是对request写了一部分东西进去，然后在render的时候：
-            # request是要render回去的。这些信息也就随着返回浏览器。完成登录
-            login(request, user)
-            return render(request, "index.html")
-        # 没有成功说明里面的值是None，并再次跳转回主页面
-        else:
-            return render(request, "login.html", {"msg": "用户名或密码错误! "})
-
-    # 获取登录页面为get
-    elif request.method == "GET":
-        # render就是渲染html返回用户
-        # render三变量: request 模板名称 一个字典写明传给前端的值
-        return render(request, "login2.html", {})
-
-
+'''
+用户忘记密码的处理
+'''
 class ForgetPwdView(View):
     """用户忘记密码的处理view"""
     # get方法直接返回页面
@@ -246,7 +232,9 @@ class ForgetPwdView(View):
                 request, "forgetpwd.html", {
                     "forget_from": forget_form})
 
-
+'''
+重置密码
+'''
 class ResetView(View):
     """重置密码的view"""
 
@@ -270,7 +258,9 @@ class ResetView(View):
                 request, "forgetpwd.html", {
                     "msg": "您的重置密码链接无效,请重新请求", "active_form": active_form})
 
-
+'''
+改变密码
+'''
 class ModifyPwdView(View):
     """改变密码的view"""
 
@@ -304,13 +294,15 @@ class ModifyPwdView(View):
                 request, "password_reset.html", {
                     "email": email, "modiypwd_form": modiypwd_form})
 
-
+'''
+个人信息
+'''
 class UserInfoView(LoginRequiredMixin, View):
     login_url = '/login/'
     redirect_field_name = 'next'
 
     def get(self, request):
-        return render(request, "usercenter-info.html", {
+        return render(request, "users/userInfo.html", {
 
         })
 
@@ -319,9 +311,10 @@ class UserInfoView(LoginRequiredMixin, View):
         user_info_form = UserInfoForm(request.POST, instance=request.user)
         if user_info_form.is_valid():
             user_info_form.save()
-            return HttpResponse(
-                '{"status":"success"}',
-                content_type='application/json')
+            context = {'msg':"提交成功"}
+            return render(request, "users/userInfo.html", {
+    
+            })
         else:
             # 通过json的dumps方法把字典转换为json字符串
             return HttpResponse(
@@ -329,7 +322,9 @@ class UserInfoView(LoginRequiredMixin, View):
                     user_info_form.errors),
                 content_type='application/json')
 
-
+'''
+上传头像
+'''
 class UploadImageView(LoginRequiredMixin, View):
     """用户上传图片的view:用于修改头像"""
     login_url = '/login/'
@@ -345,19 +340,21 @@ class UploadImageView(LoginRequiredMixin, View):
             # image = image_form.cleaned_data['image']
             # request.user.image = image
             # request.user.save()
-            return HttpResponse(
-                '{"status":"success"}',
-                content_type='application/json')
+            context = {'msgImg': "上传成功"}
+            return render(request, "users/userInfo.html", context)
         else:
-            return HttpResponse(
-                '{"status":"fail"}',
-                content_type='application/json')
+            context = {'msgImg': "上传失败"}
+            return render(request, "users/userInfo.html", context)
 
-
+'''
+在个人中心修改用户密码
+'''
 class UpdatePwdView(LoginRequiredMixin, View):
     """在个人中心修改用户密码"""
     login_url = '/login/'
     redirect_field_name = 'next'
+    def get(self,request):
+        return render(request,'users/changePwd.html')
 
     def post(self, request):
         modify_form = ModifyPwdForm(request.POST)
@@ -386,7 +383,9 @@ class UpdatePwdView(LoginRequiredMixin, View):
                     modify_form.errors),
                 content_type='application/json')
 
-
+'''
+发送邮箱验证码
+'''
 class SendEmailCodeView(LoginRequiredMixin, View):
     """发送邮箱验证码的view:"""
 
@@ -403,7 +402,9 @@ class SendEmailCodeView(LoginRequiredMixin, View):
         return HttpResponse(
             '{"status":"success"}',
             content_type='application/json')
-
+'''
+修改邮箱
+'''
 
 class UpdateEmailView(LoginRequiredMixin, View):
     """修改邮箱的view:"""
@@ -428,81 +429,9 @@ class UpdateEmailView(LoginRequiredMixin, View):
                 '{"email":"验证码无效"}',
                 content_type='application/json')
 
-
-class MyCourseView(LoginRequiredMixin, View):
-    """个人中心页我的课程"""
-    login_url = '/login/'
-    redirect_field_name = 'next'
-
-    def get(self, request):
-        user_courses = UserCourse.objects.filter(user=request.user)
-        return render(request, "usercenter-mycourse.html", {
-            "user_courses": user_courses,
-        })
-
-
-class MyFavOrgView(LoginRequiredMixin, View):
-    """我收藏的机构"""
-    login_url = '/login/'
-    redirect_field_name = 'next'
-
-    def get(self, request):
-        org_list = []
-        fav_orgs = UserFavorite.objects.filter(user=request.user, fav_type=2)
-        # 上面的fav_orgs只是存放了id。我们还需要通过id找到机构对象
-        for fav_org in fav_orgs:
-            # 取出fav_id也就是机构的id。
-            org_id = fav_org.fav_id
-            # 获取这个机构对象
-            org = CourseOrg.objects.get(id=org_id)
-            org_list.append(org)
-        return render(request, "usercenter-fav-org.html", {
-            "org_list": org_list,
-        })
-
-
-class MyFavTeacherView(LoginRequiredMixin, View):
-    """我收藏的授课讲师"""
-    login_url = '/login/'
-    redirect_field_name = 'next'
-
-    def get(self, request):
-        teacher_list = []
-        fav_teachers = UserFavorite.objects.filter(
-            user=request.user, fav_type=3)
-        # 上面的fav_orgs只是存放了id。我们还需要通过id找到机构对象
-        for fav_teacher in fav_teachers:
-            # 取出fav_id也就是机构的id。
-            teacher_id = fav_teacher.fav_id
-            # 获取这个机构对象
-            teacher = Teacher.objects.get(id=teacher_id)
-            teacher_list.append(teacher)
-        return render(request, "usercenter-fav-teacher.html", {
-            "teacher_list": teacher_list,
-        })
-
-
-class MyFavCourseView(LoginRequiredMixin, View):
-    """我收藏的课程"""
-    login_url = '/login/'
-    redirect_field_name = 'next'
-
-    def get(self, request):
-        course_list = []
-        fav_courses = UserFavorite.objects.filter(
-            user=request.user, fav_type=1)
-        # 上面的fav_orgs只是存放了id。我们还需要通过id找到机构对象
-        for fav_course in fav_courses:
-            # 取出fav_id也就是机构的id。
-            course_id = fav_course.fav_id
-            # 获取这个机构对象
-            course = Course.objects.get(id=course_id)
-            course_list.append(course)
-        return render(request, "usercenter-fav-course.html", {
-            "course_list": course_list,
-        })
-
-
+'''
+我的消息
+'''
 class MyMessageView(LoginRequiredMixin, View):
     """我的消息"""
     login_url = '/login/'
@@ -532,22 +461,4 @@ class MyMessageView(LoginRequiredMixin, View):
         })
 
 
-# class IndexView(View):
-#     """首页view"""
-#
-#     def get(self, request):
-#         # 取出轮播图
-#         all_banner = Banner.objects.all().order_by('index')[:5]
-#         # 正常位课程
-#         courses = Course.objects.filter(is_banner=False)[:6]
-#         # 轮播图课程取三个
-#         banner_courses = Course.objects.filter(is_banner=True)[:3]
-#         # 课程机构
-#         course_orgs = CourseOrg.objects.all()[:15]
-#         return render(request, 'index.html', {
-#             "all_banner": all_banner,
-#             "courses": courses,
-#             "banner_courses": banner_courses,
-#             "course_orgs": course_orgs,
-#         })
 

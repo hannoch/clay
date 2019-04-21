@@ -10,7 +10,7 @@
 	<meta name="apple-mobile-web-app-status-bar-style" content="black">
 	<meta name="apple-mobile-web-app-capable" content="yes">
 	<meta name="format-detection" content="telephone=no">
-	<link rel="icon" href="favicon.ico">
+	<link rel="icon" href="/static/favicon.ico">
 	<link rel="stylesheet" href="/static/layui/css/layui.css" media="all" />
 	<link rel="stylesheet" href="//at.alicdn.com/t/font_tnyc012u2rlwstt9.css" media="all" />
 	<link rel="stylesheet" href="/static/css/main.css" media="all" />
@@ -90,10 +90,10 @@
 							<cite>请叫我马哥</cite>
 						</a>
 						<dl class="layui-nav-child">
-							<dd><a href="javascript:;" data-url="/static/page/user/userInfo.html"><i class="iconfont icon-zhanghu" data-icon="icon-zhanghu"></i><cite>个人资料</cite></a></dd>
-							<dd><a href="javascript:;" data-url="/static/page/user/changePwd.html"><i class="iconfont icon-shezhi1" data-icon="icon-shezhi1"></i><cite>修改密码</cite></a></dd>
+							<dd><a href="javascript:;" data-url="{% url 'users:user_info' %}"><i class="iconfont icon-zhanghu" data-icon="icon-zhanghu"></i><cite>个人资料</cite></a></dd>
+							<dd><a href="javascript:;" data-url="{% url 'users:update_pwd' %}"><i class="iconfont icon-shezhi1" data-icon="icon-shezhi1"></i><cite>修改密码</cite></a></dd>
 							<dd><a href="javascript:;" class="changeSkin"><i class="iconfont icon-huanfu"></i><cite>更换皮肤</cite></a></dd>
-							<dd><a href="/static/staticpage/login/login.html" class="signOut"><i class="iconfont icon-loginout"></i><cite>退出</cite></a></dd>
+							<dd><a href="{% url 'logout' %}" class="signOut"><i class="iconfont icon-loginout"></i><cite>退出</cite></a></dd>
 						</dl>
 					</li>
 				</ul>
@@ -102,7 +102,7 @@
 		<!-- 左侧导航 -->
 		<div class="layui-side layui-bg-black">
 			<div class="user-photo">
-				<a class="img" title="我的头像" ><img src="/static/images/face.jpg"></a>
+				<a class="img" title="我的头像" ><img src="{{ MEDIA_URL }}{{ request.user.image }}"></a>
 				<p>你好！<span class="userName">hannoch</span>, 欢迎登录</p>
 			</div>
 			<div class="navBar layui-side-scroll"></div>

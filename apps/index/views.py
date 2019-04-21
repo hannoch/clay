@@ -19,3 +19,34 @@ class IndexView(View):
     def get(self, request):
         return render(request, "index.html")
 
+class NewsListView(View):
+    def get(self, request):
+        return render(request, "index/newsList.html")
+
+class NewsAddView(View):
+    def get(self, request):
+        return render(request, "index/newsAdd.html")
+
+class LinksListView(View):
+    def get(self, request):
+        return render(request, "index/linksList.html")
+
+class LinksAddView(View):
+    def get(self, request):
+        return render(request, "index/linksAdd.html")
+
+class SystemParameterView(View):
+    def get(self, request):
+        return render(request, "index/systemParameter.html")
+    
+class MessageView(View):
+    def get(self, request):
+        return render(request, "index/message.html")
+
+class MessageReplyView(View):
+    def get(self, request):
+        return render(request, "index/messageReply.html")
+
+class ErrorPageView(View):
+    def get(self, request):
+        return render(request, "index/404.html")

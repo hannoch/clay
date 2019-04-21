@@ -11,14 +11,14 @@
 	"children" : [
 		{
 			"title" : "基础信息",
-			"icon" : "&#xe62a;",
-			"href" : "page/collectMessage/baseInfo.html",
+			"icon" : "&#xe63c;",
+			"href" : "/collectMessage/baseinfo",
 			"spread" : false
 
 		},
 		{
 			"title" : "子域名收集",
-			"icon" : "&#xe609;",
+			"icon" : "&#xe670;",
 			"href" : "/collectMessage/domain",
 			"spread" : false
 		},
@@ -37,35 +37,35 @@
 	"children" : [
 		{"title" : "端口扫描",
 			"icon" : "&#xe609;",
-			"href" : "page/vulnerabilityScan/portScan.html",
+			"href" : "/vulnerabilityScan/portscan",
 			"spread" : false
 		},
 		{
 			"title" : "Struts2扫描",
-			"icon" : "&#xe609;",
-			"href" : "page/vulnerabilityScan/struts.html",
+			"icon" : "&#xe656;",
+			"href" : "/vulnerabilityScan/struts",
 			"spread" : false
 		},
 		{"title" : "目录扫描",
-			"icon" : "&#xe609;",
-			"href" : "page/vulnerabilityScan/dirScan.html",
+			"icon" : "&#xe857;",
+			"href" : "/vulnerabilityScan/dirscan",
 			"spread" : false
 		}
 	]
 },{
 	"title" : "网站列表",
 	"icon" : "icon-text",
-	"href" : "page/news/newsList.html",
+	"href" : "/index/newslist",
 	"spread" : true
 },{
 	"title" : "友情链接",
 	"icon" : "&#xe64c;",
-	"href" : "page/links/linksList.html",
+	"href" : "/index/linkslist",
 	"spread" : true
 },{
 	"title" : "系统基本参数",
 	"icon" : "&#xe631;",
-	"href" : "page/systemParameter/systemParameter.html",
+	"href" : "/index/systemparameter",
 	"spread" : false
 },{
 	"title" : "其他",
@@ -80,7 +80,7 @@
 			"spread" : false
 		},
 		{
-			"title" : "登录",
+			"title" : "后台登录",
 			"icon" : "&#xe609;",
 			"href" : "http://127.0.0.1:8000/admin",
 			"spread" : false,

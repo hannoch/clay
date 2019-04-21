@@ -25,7 +25,7 @@ import xadmin
 from django.views.generic import TemplateView
 # from users.views import user_login
 from clay.settings import MEDIA_ROOT
-from organization.views import OrgView
+
 from users.views import LoginView, RegisterView, ActiveUserView, ForgetPwdView, ResetView, ModifyPwdView, LogoutView
 
 
@@ -33,6 +33,7 @@ urlpatterns = [
     path('admin/', xadmin.site.urls),
     # 别忘记在顶部引入 views 模块
     path('collectMessage/', include('collectMessage.urls')),
+    path('vulnerabilityScan/', include('vulnerabilityScan.urls')),
     path('index/', include('index.urls',namespace="index")),
     # TemplateView.as_view会将template转换为view
     #path('', TemplateView.as_view(template_name="login.html"), name="index"),
@@ -48,8 +49,8 @@ urlpatterns = [
     path("register/", RegisterView.as_view(), name="register"),
     
     # 验证码url
-    path("captcha/", include('captcha.urls')),
-    
+    re_path(r"^captcha/", include('captcha.urls')),
+    #path('get_valid_img.png/', GetAlidImgView.as_view,name = "get_valid_img.png"),
     # 激活用户url
     re_path('active/(?P<active_code>.*)/', ActiveUserView.as_view(), name="user_active"),
     

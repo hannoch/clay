@@ -54,6 +54,25 @@ def domain(request):
 def googlehack(request):
 	return render(request, 'collectMessage/googleHack.html')
 
+# 前往baseinfo 页
+def baseinfo(request):
+	if request.method == "GET":
+		return render(request, 'collectMessage/baseInfo.html')
+	
+	if request.method == "POST":
+		'''
+		linux	通过表单提交之后,变成了POST请求
+		'''
+		# 获取POST里面的信息
+		url = request.POST["url"]
+		#实例化Ｃelery
+		resultID = whoisinfo.delay(url)
+		datadict = resultID.get()
+		context = {}
+		context['data'] = datadict
+		print(datadict)
+		return render(request, 'collectMessage/baseInfo.html',context)
+
 """
 从domain.html input 中得到数据
 """
