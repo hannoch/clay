@@ -39,9 +39,6 @@ urlpatterns = [
     #path('', TemplateView.as_view(template_name="login.html"), name="index"),
     # 基于类方法实现登录,这里是调用它的方法
     path('', LoginView.as_view(), name="login"),
-    
-    # 主界面
-    
     # 退出功能url
     path('logout/', LogoutView.as_view(), name="logout"),
     
@@ -63,14 +60,7 @@ urlpatterns = [
     # 修改密码url; 用于passwordreset页面提交表单
     path('modify_pwd/', ModifyPwdView.as_view(), name="modify_pwd"),
     
-    # 课程机构app的url配置，讲师的也在里面
-    path("org/", include('organization.urls', namespace='org')),
-    # 处理图片显示的url,使用Django自带serve,传入参数告诉它去哪个路径找，我们有配置好的路径MEDIAROOT
     re_path('media/(?P<path>.*)', serve, {"document_root": MEDIA_ROOT}),
-    # 处理图片显示的url,使用Django自带serve,传入参数告诉它去哪个路径找，我们有配置好的路径MEDIAROOT
-    # re_path('static/(?P<path>.*)', serve, {"document_root": STATIC_ROOT}),
-    # 课程app的url配置
-    path("course/", include('courses.urls')),
     # user app的url配置
     path("users/", include('users.urls', namespace="users")),
     

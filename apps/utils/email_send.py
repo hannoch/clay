@@ -1,11 +1,7 @@
 # encoding: utf-8
-__author__ = 'mtianyan'
-__date__ = '2018/1/11 0011 03:57'
 
 # encoding: utf-8
 from random import Random
-
-
 from users.models import EmailVerifyRecord
 # 导入Django自带的邮件模块
 from django.core.mail import send_mail, EmailMessage

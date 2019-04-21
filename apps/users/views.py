@@ -6,18 +6,11 @@ from django.urls import reverse
 from pure_pagination import Paginator, EmptyPage, PageNotAnInteger
 from django.http import HttpResponseRedirect, HttpResponse
 from django.shortcuts import render
-from captcha.models import CaptchaStore
-from captcha.helpers import captcha_image_url
-from PIL import Image, ImageDraw, ImageFont
-import random
-from io import BytesIO
-
 # Django自带的用户验证,login
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.backends import ModelBackend
 
-from operation.models import  UserMessage
-from .models import UserProfile, EmailVerifyRecord, Banner
+from .models import UserProfile, EmailVerifyRecord
 # 并集运算
 from django.db.models import Q
 # 基于类实现需要继承的view
@@ -47,11 +40,11 @@ class ActiveUserView(View):
                 user.is_active = True
                 user.save()
                 # 激活成功跳转到登录页面
-                return render(request, "login2.html", )
+                return render(request, "users/login.html", )
         # 自己瞎输的验证码
         else:
             return render(
-                request, "register.html", {
+                request, "users/register.html", {
                     "msg": "您的激活链接无效", "active_form": active_form})
 
 '''
@@ -65,7 +58,7 @@ class RegisterView(View):
         # 添加验证码
         register_form = RegisterForm()
         return render(
-            request, "register.html", {
+            request, "users/register.html", {
                 'register_form': register_form})
 
     def post(self, request):
@@ -77,7 +70,7 @@ class RegisterView(View):
             # 用户查重
             if UserProfile.objects.filter(email=user_name):
                 return render(
-                    request, "register.html", {
+                    request, "users/register.html", {
                         "register_form": register_form, "msg": "用户已存在"})
             pass_word = request.POST.get("password", "")
 
@@ -96,17 +89,17 @@ class RegisterView(View):
             # 写入欢迎注册消息
             user_message = UserMessage()
             user_message.user = user_profile.id
-            user_message.message = "欢迎注册mtianyan慕课小站!! --系统自动消息"
+            user_message.message = " --系统自动消息"
             user_message.save()
             # 发送注册激活邮件
             send_register_eamil(user_name, "register")
 
             # 跳转到登录页面
-            return render(request, "login2.html", )
+            return render(request, "users/login.html", )
         # 注册邮箱form验证失败
         else:
             return render(
-                request, "register.html", {
+                request, "users/register.html", {
                     "register_form": register_form})
 
 '''
@@ -214,7 +207,7 @@ class ForgetPwdView(View):
     def get(self, request):
         # 给忘记密码页面加上验证码
         active_form = ActiveForm(request.POST)
-        return render(request, "forgetpwd.html", {"active_form": active_form})
+        return render(request, "users/changePwd.html", {"active_form": active_form})
     # post方法实现
 
     def post(self, request):
@@ -225,11 +218,11 @@ class ForgetPwdView(View):
             # 发送找回密码邮件
             send_register_eamil(email, "forget")
             # 发送完毕返回登录页面并显示发送邮件成功。
-            return render(request, "login2.html", {"msg": "重置密码邮件已发送,请注意查收"})
+            return render(request, "users/register.html", {"msg": "重置密码邮件已发送,请注意查收"})
         # 如果表单验证失败也就是他验证码输错等。
         else:
             return render(
-                request, "forgetpwd.html", {
+                request, "users/changePwd.html", {
                     "forget_from": forget_form})
 
 '''
@@ -302,9 +295,8 @@ class UserInfoView(LoginRequiredMixin, View):
     redirect_field_name = 'next'
 
     def get(self, request):
-        return render(request, "users/userInfo.html", {
-
-        })
+        userinfo = UserProfile.objects.all()
+        return render(request, "users/userInfo.html",)
 
     def post(self, request):
         # 不像用户咨询是一个新的。需要指明instance。不然无法修改，而是新增用户
@@ -341,10 +333,12 @@ class UploadImageView(LoginRequiredMixin, View):
             # request.user.image = image
             # request.user.save()
             context = {'msgImg': "上传成功"}
-            return render(request, "users/userInfo.html", context)
+            #return reverse("index:index")
+            return render(request, "index.html", context)
         else:
             context = {'msgImg': "上传失败"}
-            return render(request, "users/userInfo.html", context)
+            #return reverse("index:index")
+            return render(request, "index.html", context)
 
 '''
 在个人中心修改用户密码

@@ -33,6 +33,7 @@ class UserProfile(AbstractUser):
         verbose_name=u"电话")
     # 头像 默认使用default.png
     image = models.ImageField(
+        blank=True,
         upload_to="image/%Y/%m",
         default=u"image/default.png",
         max_length=100,

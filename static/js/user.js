@@ -12,16 +12,6 @@ layui.config({
 		laydate = layui.laydate;
         loadProvince(); //加载省信息
 
-    // layui.upload({
-    // 	url : "/static/json/userface.json",
-    // 	success: function(res){
-    // 		var num = parseInt(4*Math.random());  //生成0-4的随机数
-    // 		//随机显示一个头像信息
-	//     	userFace.src = res.data[num].src;
-	//     	window.sessionStorage.setItem('userFace',res.data[num].src);
-	//     }
-    // });
-
     //添加验证规则
     form.verify({
         oldPwd : function(value, item){
@@ -80,17 +70,12 @@ layui.config({
                 $(".userHobby input[name='"+key+"']").attr("checked","checked");
             }
         }
-        $(".userEmail").val(userInfo.userEmail); //用户邮箱
+        $(".email").val(userInfo.email); //用户邮箱
         $(".myself").val(userInfo.myself); //自我评价
         form.render();
     }
 
-    //提交头像
-    // $('#js-img-up').uploadPreview({
-    //     Img: ".js-img-show", Width: 94, Height: 94 ,Callback:function(){
-    //     $('#jsAvatarForm').submit();
-    // }});
-    //提交个人资料
+     //提交个人资料
     form.on("submit(changeUser)",function(data){
     	var index = layer.msg('提交中，请稍候',{icon: 16,time:false,shade:0.8});
         //将填写的用户信息存到session以便下次调取
@@ -103,7 +88,7 @@ layui.config({
             'province' : data.field.province,
             'city' : data.field.city,
             'area' : data.field.area,
-            'userEmail' : $(".userEmail").val(),
+            'email' : $(".userEmail").val(),
             'myself' : $(".myself").val()
         };
         for(key in data.field){
@@ -118,6 +103,83 @@ layui.config({
         },2000);
     	return false; //阻止表单跳转。如果需要表单跳转，去掉这段即可。
     })
+
+    // //提交个人资料
+    // form.on("submit(changeUser)",function(data){
+    // 	var index = layer.msg('提交中，请稍候',{icon: 16,time:false,shade:0.8});
+    //     //将填写的用户信息存到session以便下次调取
+    //     // var key,userInfoHtml = '';
+    //     // userInfoHtml = {
+    //     //     'realName' : $(".realName").val(),
+    //     //     'sex' : data.field.sex,
+    //     //     'userPhone' : $(".userPhone").val(),
+    //     //     'userBirthday' : $(".userBirthday").val(),
+    //     //     'province' : data.field.province,
+    //     //     'city' : data.field.city,
+    //     //     'area' : data.field.area,
+    //     //     'userEmail' : $(".userEmail").val(),
+    //     //     'myself' : $(".myself").val()
+    //     // };
+    //     // for(key in data.field){
+    //     //     if(key.indexOf("like") != -1){
+    //     //         userInfoHtml[key] = "on";
+    //     //     }
+    //     // }
+    //      var _self = $(this),
+    //         $jsEditUserForm = $('#jsEditUserForm')
+    //         verify = verifySubmit(
+    //         [
+    //             {id: '#nick_name', tips: Dml.Msg.epNickName, require: true}
+    //         ]
+    //     );
+    //     if(!verify){
+    //        return;
+    //     }
+    //     $.ajax({
+    //         cache: false,
+    //         type: 'post',
+    //         dataType:'json',
+    //         url:"/users/info/",
+    //         data:$jsEditUserForm.serialize(),
+    //         async: true,
+    //         beforeSend:function(XMLHttpRequest){
+    //             _self.val("保存中...");
+    //             _self.attr('disabled',true);
+    //         },
+    //         success: function(data) {
+    //             if(data.nick_name){
+    //                 _showValidateError($('#nick_name'), data.nick_name);
+    //             }else if(data.birday){
+    //                _showValidateError($('#birth_day'), data.birday);
+    //             }else if(data.address){
+    //                _showValidateError($('#address'), data.address);
+    //             }else if(data.status == "failure"){
+    //                  Dml.fun.showTipsDialog({
+    //                     title: '保存失败',
+    //                     h2: data.msg
+    //                 });
+    //             }else if(data.status == "success"){
+    //                 Dml.fun.showTipsDialog({
+    //                     title: '保存成功',
+    //                     h2: '个人信息修改成功！'
+    //                 });
+    //                 setTimeout(function(){window.location.href = window.location.href;},1500);
+    //             }
+    //         },
+    //         complete: function(XMLHttpRequest){
+    //             _self.val("保存");
+    //             _self.removeAttr("disabled");
+    //         }
+    //     });
+    //
+    //
+    //     //window.sessionStorage.setItem("userInfo",JSON.stringify(userInfoHtml));
+    //     setTimeout(function(){
+    //         layer.close(index);
+    //         layer.msg("提交成功！");
+    //     },2000);
+    // 	return false; //阻止表单跳转。如果需要表单跳转，去掉这段即可。
+    // })
 
     //修改密码
     form.on("submit(changePwd)",function(data){

@@ -86,8 +86,8 @@
 					</li>
 					<li class="layui-nav-item" pc>
 						<a href="javascript:;">
-							<img src="images/face.jpg" class="layui-circle" width="35" height="35">
-							<cite>请叫我马哥</cite>
+							<img src="{{ MEDIA_URL }}{{ request.user.image }}" class="layui-circle" width="35" height="35">
+							<cite>{{  request.user.nick_name|default_if_none:'hannoch'  }}</cite>
 						</a>
 						<dl class="layui-nav-child">
 							<dd><a href="javascript:;" data-url="{% url 'users:user_info' %}"><i class="iconfont icon-zhanghu" data-icon="icon-zhanghu"></i><cite>个人资料</cite></a></dd>
@@ -103,7 +103,7 @@
 		<div class="layui-side layui-bg-black">
 			<div class="user-photo">
 				<a class="img" title="我的头像" ><img src="{{ MEDIA_URL }}{{ request.user.image }}"></a>
-				<p>你好！<span class="userName">hannoch</span>, 欢迎登录</p>
+				<p>你好！<span class="userName">{{  request.user.nick_name|default_if_none:'hannoch'  }}</span>, 欢迎登录</p>
 			</div>
 			<div class="navBar layui-side-scroll"></div>
 		</div>

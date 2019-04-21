@@ -45,15 +45,10 @@ INSTALLED_APPS = [
     'index',
     'vulnerabilityScan',
     'users',
-    'student',
     'collectMessage',
-    'courses',
-    'operation',
-    'organization',
      'captcha',
     'pure_pagination',
     'DjangoUeditor',
-    'testcelery',
     'djcelery',
     
 ]
@@ -113,7 +108,7 @@ DATABASES = {
         'NAME': 'clay',
         'USER': 'root',
         'PASSWORD': 'hannoch',
-        'HOST': '192.168.52.128',
+        'HOST': '192.168.111.128',
     },
     'clay':{
         'ENGINE' : None
@@ -125,7 +120,7 @@ DATABASES = {
 
 #BROKER_URL = 'redis://192.168.52.128:6379/0'
 BROKER_URL ='amqp://guest:guest@localhost:5672//'
-CELERY_RESULT_BACKEND = 'redis://192.168.52.128:6379/1'
+CELERY_RESULT_BACKEND = 'redis://192.168.111.128:6379/1'
 CELERY_ACCEPT_CONTENT = ['application/json']
 CELERY_RESULT_SERIALIZER = 'json'
 CELERY_TASK_SERIALIZER = 'json'
